@@ -2,6 +2,9 @@ dist: xenial
 language: minimal
 env:
 - V=0.26.1
+cache:
+  directories:
+  - $HOME/.bazel_repository_cache
 install:
 - |
   [ -z "$encrypted_12b15f820731_iv" ] || openssl aes-256-cbc -K $encrypted_12b15f820731_key -iv $encrypted_12b15f820731_iv \
