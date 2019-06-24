@@ -7,7 +7,7 @@ import icfp2019.model.Action
 import icfp2019.model.GameState
 import icfp2019.model.RobotId
 
-class EatCloserThenFarther : Strategy {
+object EatCloserThenFarther : Strategy {
     override fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> Action {
         val distanceToWallsAnalyzer = DistanceToWalls().analyze(initialState)
         return { robotId, state ->

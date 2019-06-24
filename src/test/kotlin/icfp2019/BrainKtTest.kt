@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 
 import java.util.*
 
-@Disabled
 internal class BrainKtTest {
     class TestStrategy(vararg actions: Action) : Strategy {
         private val queue = ArrayDeque(actions.toList())
@@ -25,7 +24,6 @@ internal class BrainKtTest {
     }
 
     @Test
-    @Disabled
     fun brainStep() {
         val problem = parseTestMap(init)
         val solution = parseTestMap(fini)

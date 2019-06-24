@@ -124,6 +124,10 @@ fun parseBoosters(boosters: String): List<ParsedBooster> {
     return Splitters.SEMI_SPLITTER
         .split(boosters)
         .map {
+            println(it)
+            val booster = Booster.fromChar(it[0])
+            val point = parsePoint(it.substring(1))
+            println("booster: $booster point: $point")
             ParsedBooster(Booster.fromChar(it[0]), parsePoint(it.substring(1)))
         }
 }

@@ -8,6 +8,9 @@ import icfp2019.model.Action
 import icfp2019.model.GameState
 import icfp2019.model.Problem
 import icfp2019.model.RobotId
+import java.util.concurrent.CompletableFuture
+import kotlin.streams.asStream
+import kotlin.streams.toList
 
 fun strategySequence(
     initialGameState: GameState,
@@ -79,14 +82,21 @@ fun brainStep(
     while (!gameState.isGameComplete() && workingSet.isNotEmpty()) {
         // pick the minimum across all robot/strategy pairs
         val winner = workingSet
+            .stream()
+            .parallel()
             .flatMap { robotId ->
                 strategies
+                    .toList()
                     .map { strategy ->
-                        strategySequence(gameState, strategy, robotId)
-                            .take(maximumSteps)
-                            .score(robotId, strategy)
+                        CompletableFuture.supplyAsync {
+                            strategySequence(gameState, strategy, robotId)
+                                .take(maximumSteps)
+                                .score(robotId, strategy)
+                        }
                     }
-            }
+                    .map { it.get() }
+                    .stream()
+            }.toList()
 
         val winner0 = winner.minBy { it.distanceEstimate }!!
 

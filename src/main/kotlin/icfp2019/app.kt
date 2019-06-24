@@ -1,7 +1,9 @@
 package icfp2019
 
 import icfp2019.model.*
-import icfp2019.strategies.DFSStrategy
+import icfp2019.strategies.BFSStrategy
+import icfp2019.strategies.EatCloserThenFarther
+import icfp2019.strategies.SpeedBoosterStrategy
 import java.io.File
 import java.nio.file.Paths
 import kotlin.system.measureTimeMillis
@@ -10,8 +12,9 @@ private fun computeSolution(file: File): Pair<Solution?, Long> {
     var solution: Solution? = null
     val timeElapsed = measureTimeMillis {
         print("Running ${file.name}... ")
-        val problem = parseDesc(file.readText(), file.name)
-        brain(problem, listOf(DFSStrategy), 1).forEach { partialSolution ->
+        val description = file.readText()
+        val problem = parseDesc(description, file.name)
+        brain(problem, listOf(BFSStrategy, EatCloserThenFarther, SpeedBoosterStrategy), 2).forEach { partialSolution ->
             solution = partialSolution
             File(file.parentFile, "${file.nameWithoutExtension}.sol-partial").writeText(solution.toString())
         }
