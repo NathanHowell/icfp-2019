@@ -5,5 +5,4 @@ import icfp2019.model.GameState
 import icfp2019.model.RobotId
 
 interface Strategy {
-    fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> Action
-}
+    fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> List<Action> }

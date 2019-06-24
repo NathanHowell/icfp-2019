@@ -30,7 +30,7 @@ class SpeedBoosterStrategyTests {
     """.toProblem()
         val gs = GameState(problem)
         val strategy = SpeedBoosterStrategy.compute(gs)
-        val r = strategy(RobotId.first, gs)
+        val r = strategy(RobotId.first, gs).first()
         Assertions.assertTrue(r == Action.MoveUp || r == Action.MoveLeft)
     }
 }

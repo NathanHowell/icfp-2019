@@ -11,12 +11,12 @@ internal class BrainKtTest {
     class TestStrategy(vararg actions: Action) : Strategy {
         private val queue = ArrayDeque(actions.toList())
 
-        override fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> Action {
+        override fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> List<Action> {
             return { _, _ ->
                 if (queue.isEmpty()) {
-                    Action.DoNothing
+                    listOf(Action.DoNothing)
                 } else {
-                    queue.pop()
+                    listOf(queue.pop())
                 }
             }
         }

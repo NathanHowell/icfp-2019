@@ -8,24 +8,24 @@ import icfp2019.model.GameState
 import icfp2019.model.RobotId
 
 object SpeedBoosterStrategy : Strategy {
-    override fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> Action {
+    override fun compute(initialState: GameState): (robotId: RobotId, state: GameState) -> List<Action> {
         val boosterAnalyzerGenerator = FindPathsToBoostersAnalyzer.analyze(initialState)
         return { robotId, state ->
             val robot = state.robot(robotId)
             if (robot.hasActiveFastWheels()) {
-                Action.DoNothing
+                listOf(Action.DoNothing)
             } else if (state.boostersAvailable(Booster.FastWheels) > 0) {
-                Action.AttachFastWheels
+                listOf(Action.AttachFastWheels)
             } else {
                 val robotPoint = state.robot(robotId).currentPosition
                 val boosterAnalyzer = boosterAnalyzerGenerator(robotId, state)
                 val speedBoosterAnalyzer = boosterAnalyzer(Booster.FastWheels)
                 if (speedBoosterAnalyzer.size == 0) {
-                    Action.DoNothing
+                    listOf(Action.DoNothing)
                 } else {
                     speedBoosterAnalyzer
                         .minBy { it.length }
-                        .let { robotPoint.actionToGetToNeighbor(it!!.vertexList[1].point) }
+                        .let { listOf(robotPoint.actionToGetToNeighbor(it!!.vertexList[1].point)) }
                 }
             }
         }

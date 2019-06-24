@@ -8,6 +8,6 @@ import icfp2019.strategies.BFSStrategy
 
 object BFSAnalyzer : Analyzer<Action> {
     override fun analyze(initialState: GameState): (robotId: RobotId, state: GameState) -> Action {
-        return { robotId, state -> BFSStrategy.compute(initialState).invoke(robotId, state) }
+        return { robotId, state -> BFSStrategy.compute(initialState).invoke(robotId, state).first() }
     }
 }

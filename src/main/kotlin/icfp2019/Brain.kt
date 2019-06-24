@@ -1,6 +1,7 @@
 package icfp2019
 
 import icfp2019.analyzers.ConservativeDistanceAnalyzer
+import icfp2019.analyzers.ShortestPathUsingDijkstra
 import icfp2019.core.DistanceEstimate
 import icfp2019.core.Strategy
 import icfp2019.core.applyAction
@@ -18,9 +19,10 @@ fun strategySequence(
     return generateSequence(
         seed = initialGameState to initialAction,
         nextFunction = { (gameState, _) ->
-            if (gameState.isGameComplete()) null
-            else {
-                val nextAction = strategy.compute(gameState)(robotId, gameState)
+            if (gameState.isGameComplete()) {
+                null
+            } else {
+                val nextAction = strategy.compute(gameState)(robotId, gameState).first()
                 val nextState = applyAction(gameState, robotId, nextAction)
                 nextState to nextAction
             }
@@ -49,6 +51,11 @@ fun Sequence<Pair<GameState, Action>>.score(
     val point = final.robotState.getValue(robotId).currentPosition
     val gameState = initial.first
     val conservativeDistance = ConservativeDistanceAnalyzer.analyze(gameState)(robotId, final)(point)
+    val path = ShortestPathUsingDijkstra.analyze(gameState)(RobotId.first, gameState)
+        .getPath(gameState.get(initial.first.robot(robotId).currentPosition), gameState.get(point))
+    val unwrappedCount = path.vertexList
+        .filterNotNull()
+        .count { !it.isWrapped }
 
     // return the initial game state, if this path is the winner
     // we can use this to avoid duplicate action evaluation
@@ -56,7 +63,7 @@ fun Sequence<Pair<GameState, Action>>.score(
         robotId,
         initial.first,
         initial.second,
-        conservativeDistance.estimate,
+        conservativeDistance.estimate.map { it - unwrappedCount },
         strategy
     )
 }
