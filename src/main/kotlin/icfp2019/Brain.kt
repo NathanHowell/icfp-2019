@@ -9,6 +9,7 @@ import icfp2019.model.Action
 import icfp2019.model.GameState
 import icfp2019.model.Problem
 import icfp2019.model.RobotId
+import java.lang.IllegalStateException
 
 fun strategySequence(
     initialGameState: GameState,
@@ -22,7 +23,7 @@ fun strategySequence(
             if (gameState.isGameComplete()) {
                 null
             } else {
-                val nextAction = strategy.compute(gameState)(robotId, gameState).first()
+                val nextAction = strategy.compute(gameState)(robotId, gameState).min() ?: throw IllegalStateException()
                 val nextState = applyAction(gameState, robotId, nextAction)
                 nextState to nextAction
             }

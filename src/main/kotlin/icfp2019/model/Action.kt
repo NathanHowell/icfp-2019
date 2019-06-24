@@ -1,6 +1,6 @@
 package icfp2019.model
 
-sealed class Action {
+sealed class Action(val ordinal: Int) : Comparable<Action> {
     fun toSolutionString(): String = when (this) {
         MoveUp -> "W"
         MoveDown -> "S"
@@ -17,17 +17,19 @@ sealed class Action {
         is TeleportBack -> "T(${this.targetResetPoint.x},${this.targetResetPoint.y})"
     }
 
-    object MoveUp : Action()
-    object MoveDown : Action()
-    object MoveLeft : Action()
-    object MoveRight : Action()
-    object DoNothing : Action()
-    object TurnClockwise : Action()
-    object TurnCounterClockwise : Action()
-    data class AttachManipulator(val point: Point) : Action()
-    object AttachFastWheels : Action()
-    object StartDrill : Action()
-    object PlantTeleportResetPoint : Action()
-    data class TeleportBack(val targetResetPoint: Point) : Action()
-    object CloneRobot : Action()
+    override fun compareTo(other: Action): Int = ordinal.compareTo(other.ordinal)
+
+    object MoveUp : Action(0)
+    object MoveRight : Action(1)
+    object MoveDown : Action(2)
+    object MoveLeft : Action(3)
+    object TurnClockwise : Action(4)
+    object TurnCounterClockwise : Action(5)
+    data class AttachManipulator(val point: Point) : Action(6)
+    object AttachFastWheels : Action(7)
+    object StartDrill : Action(8)
+    object PlantTeleportResetPoint : Action(9)
+    data class TeleportBack(val targetResetPoint: Point) : Action(10)
+    object CloneRobot : Action(11)
+    object DoNothing : Action(12)
 }
